@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import { MenuItem } from "./entities/MenuItem";
+import Foods from "./components/Foods";
 
 function App() {
   const [isChooseFoodPage, setIsChooseFoodPage] = useState(false); // Para saber si se aprieta el boton de 'Pedir comida'
@@ -43,19 +44,26 @@ function App() {
       <button
         className="toggleButton"
         onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
-      ></button>
+      >
+        {isChooseFoodPage ? "Disponibilidad" : "Pedir Comida"}
+      </button>
       <h3 className="title">Comida Rápida Online</h3>
-      <h4 className="subTitle">Menús</h4>
-      <ul className="ulApp">
-        {menuItems.map((item) => {
-          return (
-            <li key={item.id} className="liApp">
-              <p>{item.name}</p>
-              <p>#{item.quantity}</p>
-            </li>
-          );
-        })}
-      </ul>
+      {!isChooseFoodPage && (
+        <>
+          <h4 className="subTitle">Menús</h4>
+          <ul className="ulApp">
+            {menuItems.map((item) => {
+              return (
+                <li key={item.id} className="liApp">
+                  <p>{item.name}</p>
+                  <p>#{item.quantity}</p>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+      {isChooseFoodPage && <Foods foodItems={menuItems}></Foods>}
     </div>
   );
 }
