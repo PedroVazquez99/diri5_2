@@ -3,6 +3,7 @@ import "./App.css";
 import { MenuItem } from "./entities/MenuItem";
 
 function App() {
+  const [isChooseFoodPage, setIsChooseFoodPage] = useState(false); // Para saber si se aprieta el boton de 'Pedir comida'
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     {
       id: 1,
@@ -39,6 +40,10 @@ function App() {
   ]);
   return (
     <div className="App">
+      <button
+        className="toggleButton"
+        onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
+      ></button>
       <h3 className="title">Comida Rápida Online</h3>
       <h4 className="subTitle">Menús</h4>
       <ul className="ulApp">
