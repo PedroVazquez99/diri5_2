@@ -1,11 +1,13 @@
 ul {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   list-style-type: none;
 }
 
 img {
   border-radius: 30px;
   width: 20vw;
+  height: 50%;
 }
 
 li {
@@ -23,6 +25,10 @@ li:hover {
   transform: scale(1.1);
   cursor: pointer;
   transition: transform 0.4s ease;
+  > img {
+    box-shadow: 0 15px 30px rgba(27, 56, 40, 0.5);
+    filter: saturate(150%);
+  }
 }
 
 .foodItem {
@@ -34,5 +40,10 @@ li:hover {
 .foodPrice {
   font-size: 1.5em;
   color: rgb(16, 114, 60);
-  height: auto;
+  font-weight: bold;
+}
+
+.foodDesc {
+  color: rgb(16, 114, 60);
+  font-size: 1.2em;
 }
