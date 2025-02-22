@@ -1,0 +1,38 @@
+ul {
+  display: flex;
+  list-style-type: none;
+}
+
+img {
+  border-radius: 30px;
+  width: 20vw;
+}
+
+li {
+  margin: 1em;
+  width: 20vw;
+  border: 3px solid rgb(16, 114, 60);
+  border-radius: 30px;
+  text-align: center;
+  background-color: #f0f0f0;
+  box-shadow: 5px 5px 5px #888888;
+  padding: 0.5em;
+}
+
+li:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.foodItem {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.foodPrice {
+  font-size: 1.5em;
+  color: rgb(16, 114, 60);
+  height: auto;
+}
