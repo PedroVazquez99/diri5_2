@@ -8,8 +8,8 @@ export const foodItemsContext = React.createContext<MenuItem[]>([]); // Contexto
 function App() {
   const [selectedFood, setSelectedFood] = useState<MenuItem | null>(null);
   const [isChooseFoodPage, setIsChooseFoodPage] = useState(false);
-
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
+  const ejemplo = import.meta.env.VITE_EJEMPLO;
+  const [menuItems, _setMenuItems] = useState<MenuItem[]>([
     {
       id: 1,
       name: "Hamburguesa de Pollo",
@@ -45,48 +45,52 @@ function App() {
   ]);
 
   return (
-    <foodItemsContext.Provider value={menuItems}>
-      <div className="App">
-        {/* Si NO hay comida seleccionada */}
-        {!selectedFood ? (
-          <>
-            <button
-              className="toggleButton"
-              onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
-            >
-              {isChooseFoodPage ? "Disponibilidad" : "Pedir Comida"}
-            </button>
-            <h3 className="title">Comida Rápida Online</h3>
-            {!isChooseFoodPage ? (
-              <>
-                <h4 className="subTitle">Menús</h4>
-                <ul className="ulApp">
-                  {menuItems.map((item) => (
-                    <li key={item.id} className="liApp">
-                      <p>{item.name}</p>
-                      <p>#{item.quantity}</p>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <>
-                <Suspense fallback={<div>Cargando platos...</div>}>
-                  <Foods foodItems={menuItems} onFoodSelected={setSelectedFood} />
-                </Suspense>
-              </>
-            )}
-          </>
-        ) : (
-          // Si hay comida seleccionada
-          <FoodOrder
-            food={selectedFood}
-            onReturnToMenu={() => setSelectedFood(null)}
-          />
-        )}
-      </div>
-    </foodItemsContext.Provider>
-  );
+    <>
+      <h2>{ejemplo}</h2>
+      <foodItemsContext.Provider value={menuItems}>
+        <div className="App">
+          {/* Si NO hay comida seleccionada */}
+          {!selectedFood ? (
+            <>
+              <button
+                className="toggleButton"
+                onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
+              >
+                {isChooseFoodPage ? "Disponibilidad" : "Pedir Comida"}
+              </button>
+              <h3 className="title">Comida Rápida Online</h3>
+              {!isChooseFoodPage ? (
+                <>
+                  <h4 className="subTitle">Menús</h4>
+                  <ul className="ulApp">
+                    {menuItems.map((item) => (
+                      <li key={item.id} className="liApp">
+                        <p>{item.name}</p>
+                        <p>#{item.quantity}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <Suspense fallback={<div>Cargando platos...</div>}>
+                    <Foods foodItems={menuItems} onFoodSelected={setSelectedFood} />
+                  </Suspense>
+                </>
+              )}
+            </>
+          ) : (
+            // Si hay comida seleccionada
+            <FoodOrder
+              food={selectedFood}
+              onReturnToMenu={() => setSelectedFood(null)}
+            />
+          )}
+        </div>
+      </foodItemsContext.Provider>
+      );
+
+    </>
 }
 
 export default App;
