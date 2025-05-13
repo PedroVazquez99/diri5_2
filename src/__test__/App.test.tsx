@@ -1,87 +1,73 @@
-// Imports
 import { describe, it, expect, afterEach } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-
-// To Test
 import App from '../App';
-// Tests
-describe('Renders main page correctly', async () => {
 
-    /*** Reseteamos todos los renderizadores tras cada test */
+describe('Comida Rápida App', () => {
+
     afterEach(() => {
         cleanup();
     });
 
-    // TEST 1
-    it('Should render the page correctly', async () => {
+    it('muestra cuatro productos en la carta inicial con nombre y stock', async () => {
         render(<App />);
-        const h1 = await screen.queryByText('Vite + React');
-        expect(h1).not.toBeNull();
+        const title = screen.getByText('Comida Rápida Online');
+        expect(title).toBeInTheDocument();
+
+        const items = await screen.findAllByRole('listitem');
+        expect(items).toHaveLength(4);
+
+        // Comprobamos que hay nombre y stock
+        expect(screen.getByText('Hamburguesa de Pollo')).toBeInTheDocument();
+        expect(screen.getByText('#40')).toBeInTheDocument();
     });
 
-    // TEST 2
-    it('Should show the button count set to 0', async () => {
-        // Inicialización
-        await render(<App />);
-        const button = await screen.queryByText('count is 0');
-        // Comprobaciones
-        expect(button).not.toBeNull();
-    });
-
-    // TEST 3
-    it('Should show the button count set to 3', async () => {
-        // Inicialización
-        await render(<App />);
-        const button = await screen.queryByText('count is 0');
-        // Comprobaciones previas
-        expect(button).not.toBeNull();
-        // Acciones
-        fireEvent.click(button as HTMLElement);
-        fireEvent.click(button as HTMLElement);
-        fireEvent.click(button as HTMLElement);
-        // Comprobaciones posteriores
-        expect(button?.innerHTML).toBe('count is 3');
-    });
-
-    // TEST 4
-    it('Should show the button count set to 3', async () => {
+    it('al pulsar "Pedir Comida" se muestran los precios de los productos', async () => {
         const user = userEvent.setup();
-        // Inicialización
-        await render(<App />);
-        const button = await screen.queryByText('count is 0');
-        // Comprobaciones previas
-        expect(button).not.toBeNull();
-        // Acciones
-        //fireEvent.click(button as HTMLElement);
-        await user.click(button as HTMLElement);
-    });
-
-    // TEST 5
-    it('Should render the page correctly', async () => {
-        // Inicialización
         render(<App />);
-        const h1 = await screen.queryByText('Vite + React');
-        // Comprobaciones
-        // Antes expect(h1).not.toBeNull();
-        // Con Jest DOM
-        expect(h1).toBeInTheDocument();
+
+        const toggleButton = screen.getByText('Pedir Comida');
+        await user.click(toggleButton);
+
+        const cartaTitle = await screen.findByText('Carta');
+        expect(cartaTitle).toBeInTheDocument();
+
+        // Hay 4 productos renderizados
+        const foodItems = await screen.findAllByRole('listitem');
+        expect(foodItems).toHaveLength(4);
+
+        // Comprobamos que hay al menos un precio visible
+        expect(screen.getByText('12$')).toBeInTheDocument();
     });
 
-    it('renders two images with the correct URLs', () => {
-        render(<App />)
+    it('el precio total se calcula correctamente según la cantidad seleccionada', async () => {
+        const user = userEvent.setup();
+        render(<App />);
 
-        // Grab all <img> elements
-        const images = screen.getAllByRole('img')
-        expect(images).toHaveLength(2)
+        // Ir a "Pedir Comida"
+        await user.click(screen.getByText('Pedir Comida'));
 
-        // Check that each has the correct src
-        // Depending on your build, the actual URLs might differ, so you can do substring checks:
-        expect(images[0]).toHaveAttribute('src', expect.stringContaining('vite.svg'))
-        expect(images[1]).toHaveAttribute('src', expect.stringContaining('react.svg'))
+        // Seleccionar la primera comida
+        const firstFood = await screen.findByText('Esto es una haburguesa de pollo');
+        await user.click(firstFood);
+
+        // Cambiar cantidad
+        const cantidadInput = await screen.findByLabelText('Cantidad');
+        await user.clear(cantidadInput);
+        await user.type(cantidadInput, '3');
+
+        // Volver al menú
+        const backButton = screen.getByText('Volver');
+        await user.click(backButton);
+
+        // Volver a disponibilidad para ver stock actualizado
+        const toggleButton2 = screen.getByText('Disponibilidad');
+        await user.click(toggleButton2);
+
+        // Verificar que el stock ha cambiado a #37
+        expect(await screen.findByText('#37')).toBeInTheDocument();
+
+
     });
-
-
-
 });
