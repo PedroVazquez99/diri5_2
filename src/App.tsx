@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { Suspense, useState } from "react";
 import "./App.css";
 import { MenuItem } from "./entities/MenuItem";
-import Foods from "./components/Foods";
+const Foods = React.lazy(() => import("./components/Foods")); // Importamos el componente Foods de forma lazy
 
 function App() {
   const [isChooseFoodPage, setIsChooseFoodPage] = useState(false); // Para saber si se aprieta el boton de 'Pedir comida'
@@ -63,7 +63,11 @@ function App() {
           </ul>
         </>
       )}
-      {isChooseFoodPage && <Foods foodItems={menuItems}></Foods>}
+      {isChooseFoodPage && (
+        <Suspense fallback={<div>Cargando platos...</div>}>
+          <Foods foodItems={menuItems} />
+        </Suspense>
+      )}
     </div>
   );
 }

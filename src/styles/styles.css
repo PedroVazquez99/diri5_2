@@ -7,7 +7,6 @@ ul {
 img {
   border-radius: 30px;
   width: 20vw;
-  height: 50%;
 }
 
 li {
@@ -29,12 +28,6 @@ li:hover {
     box-shadow: 0 15px 30px rgba(27, 56, 40, 0.5);
     filter: saturate(150%);
   }
-}
-
-.foodItem {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
 }
 
 .foodPrice {

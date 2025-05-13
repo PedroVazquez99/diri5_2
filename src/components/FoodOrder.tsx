@@ -1,8 +1,9 @@
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import { MenuItem } from "../entities/MenuItem";
 
 interface FoodOrderProps {
   food: MenuItem;
+  srcImg: string;
   onQuantityUpdated(id: number, quantity: number): void;
   onReturnToMenu: MouseEventHandler<HTMLButtonElement> | undefined;
 }
@@ -10,6 +11,7 @@ interface FoodOrderProps {
 function FoodOrder(props: FoodOrderProps) {
   return (
     <>
+      <img src={props.srcImg} alt={props.food.name} />
       <form>
         <p>{props.food.price}</p>
         <p>Cantidad</p>
