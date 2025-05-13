@@ -1,10 +1,13 @@
 import React, { Suspense, useState } from "react";
 import "./App.css";
 import { MenuItem } from "./entities/MenuItem";
-const Foods = React.lazy(() => import("./components/Foods")); // Importamos el componente Foods de forma lazy
+import FoodOrder from "./components/FoodOrder";
+const Foods = React.lazy(() => import("./components/Foods")); // Lazy load
 
 function App() {
-  const [isChooseFoodPage, setIsChooseFoodPage] = useState(false); // Para saber si se aprieta el boton de 'Pedir comida'
+  const [selectedFood, setSelectedFood] = useState<MenuItem | null>(null);
+  const [isChooseFoodPage, setIsChooseFoodPage] = useState(false);
+
   const [menuItems, setMenuItems] = useState<MenuItem[]>([
     {
       id: 1,
@@ -39,34 +42,59 @@ function App() {
       image: "bocadillo.jpg",
     },
   ]);
+
+  const handleQuantityUpdate = (id: number, orderedQuantity: number) => {
+    setMenuItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity - orderedQuantity } : item
+      )
+    );
+    setSelectedFood(null); // Volver al menú
+  };
+
   return (
     <div className="App">
-      <button
-        className="toggleButton"
-        onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
-      >
-        {isChooseFoodPage ? "Disponibilidad" : "Pedir Comida"}
-      </button>
-      <h3 className="title">Comida Rápida Online</h3>
-      {!isChooseFoodPage && (
+      {/* Si NO hay comida seleccionada */}
+      {!selectedFood ? (
         <>
-          <h4 className="subTitle">Menús</h4>
-          <ul className="ulApp">
-            {menuItems.map((item) => {
-              return (
-                <li key={item.id} className="liApp">
-                  <p>{item.name}</p>
-                  <p>#{item.quantity}</p>
-                </li>
-              );
-            })}
-          </ul>
+          <button
+            className="toggleButton"
+            onClick={() => setIsChooseFoodPage(!isChooseFoodPage)}
+          >
+            {isChooseFoodPage ? "Disponibilidad" : "Pedir Comida"}
+          </button>
+
+          <h3 className="title">Comida Rápida Online</h3>
+
+          {!isChooseFoodPage ? (
+            <>
+              <h4 className="subTitle">Menús</h4>
+              <ul className="ulApp">
+                {menuItems.map((item) => (
+                  <li key={item.id} className="liApp">
+                    <p>{item.name}</p>
+                    <p>#{item.quantity}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <>
+
+              <Suspense fallback={<div>Cargando platos...</div>}>
+                <Foods foodItems={menuItems} onFoodSelected={setSelectedFood} />
+              </Suspense>
+            </>
+          )}
         </>
-      )}
-      {isChooseFoodPage && (
-        <Suspense fallback={<div>Cargando platos...</div>}>
-          <Foods foodItems={menuItems} />
-        </Suspense>
+      ) : (
+        // Si hay comida seleccionada
+        <FoodOrder
+          food={selectedFood}
+          srcImg={`/images/${selectedFood.image}`}
+          onQuantityUpdated={handleQuantityUpdate}
+          onReturnToMenu={() => setSelectedFood(null)}
+        />
       )}
     </div>
   );
