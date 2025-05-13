@@ -49,7 +49,7 @@ function App() {
         item.id === id ? { ...item, quantity: item.quantity - orderedQuantity } : item
       )
     );
-    setSelectedFood(null); // Volver al menú
+    // setSelectedFood(null); // Volver al menú
   };
 
   return (

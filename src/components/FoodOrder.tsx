@@ -12,10 +12,16 @@ interface FoodOrderProps {
 function FoodOrder(props: FoodOrderProps) {
 
   const [quantity, setQuantity] = useState(1); // Estado para guardar la cantidad ingresada
+  const [isdelevery, setIsDelivery] = useState(false); // Estado para guardar si es delivery o no
 
   const handleSubmit = (event: React.FormEvent) => {
+    if (quantity < 1 || quantity > props.food.quantity) {
+      setIsDelivery(false);
+      return;
+    }
     event.preventDefault(); // Evita el comportamiento por defecto del formulario
     props.onQuantityUpdated(props.food.id, quantity);
+    setIsDelivery(true); // Cambia el estado a true para mostrar el mensaje de éxito
   };
 
   return (
@@ -56,9 +62,12 @@ function FoodOrder(props: FoodOrderProps) {
           <button className="orderButton" onClick={props.onReturnToMenu}>Volver</button>
         </div>
       </form>
-
-
-
+      {isdelevery && (
+        <div className="successMessage">
+          <p>Tu pedido ha sido realizado con éxito!</p>
+          <p>Recibirás una notificación cuando llegue.</p>
+        </div>
+      )}
     </>
   );
 }
