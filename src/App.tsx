@@ -88,9 +88,9 @@ function App() {
           )}
         </div>
       </foodItemsContext.Provider>
-      );
 
     </>
+  )
 }
 
 export default App;
