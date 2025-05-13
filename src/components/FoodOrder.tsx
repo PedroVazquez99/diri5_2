@@ -4,7 +4,6 @@ import '../styles/foodOrder.css'
 
 interface FoodOrderProps {
   food: MenuItem;
-  srcImg: string;
   onReturnToMenu: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
@@ -24,7 +23,7 @@ function FoodOrder(props: FoodOrderProps) {
 
   return (
     <>
-      <img src={props.srcImg} alt={props.food.name} />
+      <img src={"/images/" + props.food.image} alt={props.food.name} />
       <h3>{props.food.name}</h3>
       <p>{props.food.desc}</p>
       <p>{props.food.price}$</p>
