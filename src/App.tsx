@@ -92,7 +92,6 @@ function App() {
         <FoodOrder
           food={selectedFood}
           srcImg={`/images/${selectedFood.image}`}
-          onQuantityUpdated={handleQuantityUpdate}
           onReturnToMenu={() => setSelectedFood(null)}
         />
       )}

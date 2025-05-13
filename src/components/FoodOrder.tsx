@@ -5,7 +5,6 @@ import '../styles/foodOrder.css'
 interface FoodOrderProps {
   food: MenuItem;
   srcImg: string;
-  onQuantityUpdated(id: number, quantity: number): void;
   onReturnToMenu: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
@@ -20,7 +19,6 @@ function FoodOrder(props: FoodOrderProps) {
       return;
     }
     event.preventDefault(); // Evita el comportamiento por defecto del formulario
-    props.onQuantityUpdated(props.food.id, quantity);
     setIsDelivery(true); // Cambia el estado a true para mostrar el mensaje de éxito
   };
 
