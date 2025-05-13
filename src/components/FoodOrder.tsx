@@ -1,5 +1,6 @@
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useContext, useState } from "react";
 import { MenuItem } from "../entities/MenuItem";
+import { foodItemsContext } from "../App";
 import '../styles/foodOrder.css'
 
 interface FoodOrderProps {
@@ -9,16 +10,19 @@ interface FoodOrderProps {
 
 function FoodOrder(props: FoodOrderProps) {
 
+  // const [totalAmount, setTotalAmount] = useState(props.food.price); // precio unitario * cantidad
   const [quantity, setQuantity] = useState(1); // Estado para guardar la cantidad ingresada
-  const [isdelevery, setIsDelivery] = useState(false); // Estado para guardar si es delivery o no
+  const [isOrdered, setIsOrdered] = useState(false); // si está pedido
+  const menuItems: MenuItem[] = useContext(foodItemsContext);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    if (quantity < 1 || quantity > props.food.quantity) {
-      setIsDelivery(false);
-      return;
-    }
+  const handleClick = (event: React.FormEvent) => {
     event.preventDefault(); // Evita el comportamiento por defecto del formulario
-    setIsDelivery(true); // Cambia el estado a true para mostrar el mensaje de éxito
+    setIsOrdered(true);
+    menuItems.map((item: MenuItem) => {
+      if (item.id === props.food.id) {
+        item.quantity = item.quantity - quantity;
+      }
+    });
   };
 
   return (
@@ -27,7 +31,7 @@ function FoodOrder(props: FoodOrderProps) {
       <h3>{props.food.name}</h3>
       <p>{props.food.desc}</p>
       <p>{props.food.price}$</p>
-      <form className="foodOrderForm" onSubmit={handleSubmit}>
+      <form className="foodOrderForm" onSubmit={handleClick}>
         <h3>Ordena tu comida</h3>
 
         <div className="formGroup">
@@ -59,7 +63,7 @@ function FoodOrder(props: FoodOrderProps) {
           <button className="orderButton" onClick={props.onReturnToMenu}>Volver</button>
         </div>
       </form>
-      {isdelevery && (
+      {isOrdered && (
         <div className="successMessage">
           <p>Tu pedido ha sido realizado con éxito!</p>
           <p>Recibirás una notificación cuando llegue.</p>

@@ -1,6 +1,5 @@
 import "../styles/styles.css";
 import { MenuItem } from "../entities/MenuItem";
-import { useState } from "react";
 
 interface FoodsProps {
   foodItems: MenuItem[];

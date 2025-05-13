@@ -44,15 +44,6 @@ function App() {
     },
   ]);
 
-  const handleQuantityUpdate = (id: number, orderedQuantity: number) => {
-    setMenuItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity - orderedQuantity } : item
-      )
-    );
-    // setSelectedFood(null); // Volver al menú
-  };
-
   return (
     <foodItemsContext.Provider value={menuItems}>
       <div className="App">
@@ -90,7 +81,6 @@ function App() {
           // Si hay comida seleccionada
           <FoodOrder
             food={selectedFood}
-            srcImg={`/images/${selectedFood.image}`}
             onReturnToMenu={() => setSelectedFood(null)}
           />
         )}
